@@ -4,7 +4,7 @@ import { connectToDatabase } from "@/app/lib/db"
 // import { User } from "@/app/modal/User"
 import bcrypt from "bcryptjs"
 
-export const authOptions: AuthOptions =({
+ const authOptions: AuthOptions =({
   providers: [
     CredentialsProvider({
       name: "Credentials",
