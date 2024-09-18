@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth/next"
 import { connectToDatabase } from "@/app/lib/db"
 import { ObjectId } from "mongodb"
-import { authOptions } from "../../auth/[...nextauth]/route"
+import { authOptions } from "@/lib/auth"
 
 export async function PATCH(
   req: NextRequest,
