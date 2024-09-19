@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { useToast } from "@/hooks/use-toast"
+import { Loader2 } from 'lucide-react' // Import Loader2 icon for loading state
 
 const taskSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -48,7 +49,8 @@ export default function TaskForm({ onTaskAdded, initialData }: { onTaskAdded: ()
       })
 
       if (!response.ok) {
-        throw new Error(initialData ? 'Failed to update task' : 'Failed to create task')
+        const errorData = await response.json()
+        throw new Error(errorData.message || `Failed to ${initialData ? 'update' : 'create'} task`)
       }
 
       toast({
@@ -61,7 +63,8 @@ export default function TaskForm({ onTaskAdded, initialData }: { onTaskAdded: ()
     } catch (error) {
       toast({
         title: "Error",
-        description: `Failed to ${initialData ? 'update' : 'create'} task. Please try again.`,
+        description: error instanceof Error ? error.message : `Failed to ${initialData ? 'update' : 'create'} task. Please try again.`,
+        variant: "destructive",
       })
     } finally {
       setIsSubmitting(false)
@@ -156,8 +159,17 @@ export default function TaskForm({ onTaskAdded, initialData }: { onTaskAdded: ()
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-          {isSubmitting ? 'Processing...' : initialData ? 'Update Task' : 'Create Task'}
+        <Button 
+          type="submit" 
+          disabled={isSubmitting || !form.formState.isValid} 
+          className="w-full sm:w-auto"
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Processing...
+            </>
+          ) : initialData ? 'Update Task' : 'Create Task'}
         </Button>
       </form>
     </Form>
