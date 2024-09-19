@@ -67,17 +67,19 @@ export default function KanbanBoard() {
     fetchTasks()
   }
 
+  
+
   const columns = ['To Do', 'In Progress', 'Completed']
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Kanban Board</h2>
+    <div className="p-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+        <h2 className="text-2xl font-bold mb-2 sm:mb-0">Kanban Board</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button>Add New Task</Button>
+            <Button className="w-full sm:w-auto">Add New Task</Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Create a new task</DialogTitle>
               <DialogDescription>
@@ -89,16 +91,16 @@ export default function KanbanBoard() {
         </Dialog>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex space-x-4">
+        <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
           {columns.map(column => (
-            <div key={column} className="w-1/3">
+            <div key={column} className="w-full sm:w-1/3">
               <h3 className="font-bold mb-2">{column}</h3>
               <Droppable droppableId={column}>
                 {(provided) => (
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    className="bg-gray-100 p-4 rounded min-h-[500px]"
+                    className="bg-gray-100 p-4 rounded min-h-[200px] sm:min-h-[500px]"
                   >
                     {tasks
                       .filter(task => task.status === column)
@@ -112,14 +114,15 @@ export default function KanbanBoard() {
                             >
                               <Card className="mb-4">
                                 <CardHeader>
-                                  <CardTitle>{task.title}</CardTitle>
-                                  <CardDescription>{task.description}</CardDescription>
+                                  <CardTitle className="text-sm sm:text-base">{task.title}</CardTitle>
+                                  <CardDescription className="text-xs sm:text-sm">{task.description}</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                  <Badge>{task.priority}</Badge>
-                                  <div></div>
-                                  <Badge>{task.status}</Badge>
-                                  <p className="mt-2">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
+                                  <div className="flex flex-wrap gap-2">
+                                    <Badge className="text-xs">{task.priority}</Badge>
+                                    <Badge className="text-xs">{task.status}</Badge>
+                                  </div>
+                                  <p className="mt-2 text-xs sm:text-sm">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
                                 </CardContent>
                               </Card>
                             </div>
