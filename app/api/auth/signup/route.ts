@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   const result = await db.collection("users").insertOne({
     username,
     email,
-    password: hashedPassword,
+    password,
   })
 
   return NextResponse.json({ id: result.insertedId }, { status: 201 })

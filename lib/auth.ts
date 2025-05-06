@@ -20,8 +20,12 @@ import bcrypt from "bcryptjs"
         const { db } = await connectToDatabase()
         const user = await db.collection("users").findOne({ username: credentials.username })
 
-        if (user && bcrypt.compareSync(credentials.password, user.password)) {
-          return { id: user._id.toString(), name: user.username, email: user.email }
+        if (user && credentials.password === user.password) {
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.username
+          }
         }
         return null
       }

@@ -16,7 +16,7 @@ export default function Login() {
       password,
       redirect: true,
     })
-
+    console.log("SignIn result:", result);
     if (result?.error) {
         console.log('Invalid credentials. Please try again.');
       } else if (result?.ok) {
